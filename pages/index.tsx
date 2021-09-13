@@ -11,6 +11,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     // if (!isReady) return;
+    console.log("in index use effect")
     if (currentUser) {
       router.replace("/recipes");
     } else {

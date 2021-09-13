@@ -1,4 +1,4 @@
-import { QueryDocumentSnapshot, SnapshotOptions } from "../config/firebase";
+import { SnapshotOptions, QueryDocumentSnapshot, DocumentData  } from 'firebase/firestore';
 
 import IUser from "../interfaces/user";
 import Model from "./model";
@@ -23,7 +23,7 @@ export default class User extends Model implements IUser {
 }
 
 export const userConverter = {
-    fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
+    fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options?: SnapshotOptions) {
         const data = snapshot.data(options);
         return new User({ ...(data as IUser), doc: snapshot, id: snapshot.id });
     },

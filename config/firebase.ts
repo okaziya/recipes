@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, getDocs, collection } from 'firebase/firestore/lite';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { initializeApp  } from 'firebase/app';
+import { getFirestore  } from 'firebase/firestore/lite';
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig  = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -13,6 +13,7 @@ const firebaseConfig  = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 
 export const auth = getAuth();
 auth.languageCode = 'cs';
@@ -49,10 +50,9 @@ auth.languageCode = 'cs';
 
 export const db = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
+export const provider = new GoogleAuthProvider();
 
 // provider.setCustomParameters({ prompt: "select_account" });
-export const signInWidthGoogle = () => signInWithPopup(auth, provider);
 
 // export type DocumentReference = firebase.firestore.DocumentReference;
 // export type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
