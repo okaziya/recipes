@@ -18,7 +18,6 @@ export const setUser = async (
     userAuth: User | string,
     data?: Omit<IUser, "createdAt" | "deletedAt" | "doc" | "id" | "updatedAt">
 ) => {
-    console.log("inside of set user", userAuth, data);
     const userId = (typeof userAuth === "string") ? userAuth : userAuth.uid
     const userRef = doc(db, "users", userId);
     if (data === undefined && typeof userAuth !== "string") {

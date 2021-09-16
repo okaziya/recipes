@@ -1,4 +1,4 @@
-import { DocumentSnapshot, FieldValue, Timestamp } from "../config/firebase";
+import { DocumentSnapshot, FieldValue, Timestamp } from 'firebase/firestore/lite';
 
 interface Model {
     createdAt: Date | FieldValue | Timestamp;

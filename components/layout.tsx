@@ -10,6 +10,7 @@ import styles from "../styles/components/layout.module.css";
 import React from "react";
 import Image from "next/image";
 import User from "../public/images/user.svg"
+import Container from "react-bootstrap/Container"
 
 type Props = {
     children?: React.ReactNode;
@@ -21,7 +22,7 @@ export default function Layout({children}: Props) {
 
 
     return (
-        <>
+        <Container>
             <Head>
                 <title>{i18n.t("appName")}</title>
                 <meta name="description" content={i18n.t("appName")}/>
@@ -68,6 +69,6 @@ export default function Layout({children}: Props) {
             <main className={styles.main}>
                 {children}
             </main>
-        </>
+        </Container>
     );
 }

@@ -1,17 +1,19 @@
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import styles from "../../styles/components/recipes/recipes.module.sass"
 import RecipeList from "../../components/recipeList";
+import MyLink from "../../components/ui/link";
+import IRecipe from "../../interfaces/recipe";
 
-function Recipes() {
+export default function Recipes() {
     const [searchRecipe, setSearchRecipe] = useState("");
-    const [filterList, setFilterList] = useState([]);
+    const [filterList, setFilterList] = useState<IRecipe[]>([]);
 
     const recipesData = [
         {
             name: "Banana Bread",
             category: "deserts"
         }, {name: "oven-Roasted Asparagus", category: "main course"}
-    ]
+    ] as IRecipe[]
 
     const categories = ["deserts", "main course"]
 
@@ -20,21 +22,21 @@ function Recipes() {
         setSearchRecipe(ev.target.value);
     };
 
-    function isMathFilter(recipesData) {
+    function isMatchFilter(recipe: IRecipe) {
         return (
-            recipesData.name
+            recipe.name
                 .toLocaleLowerCase()
                 .includes(searchRecipe.toLocaleLowerCase()) &&
             (filterList.length
-                ? filterList.some((el) => el === recipesData.category)
+                ? filterList.some((el) => el === recipe.category)
                 : true)
         );
     }
 
     const resultRecipeList =
-        searchRecipe || filterList.length ? recipesData.filter(isMathFilter) : recipesData;
+        searchRecipe || filterList.length ? recipesData.filter(isMatchFilter) : recipesData;
 
-    const handleFilterChange = (e) => {
+    const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
         const checkedCategory = e.target.name;
 
         setFilterList(
@@ -46,6 +48,7 @@ function Recipes() {
 
     return (
         <>
+            <MyLink href={"/recipes/new"}>+</MyLink>
             {categories && (
                 <>
                     <h3 className="text-center">Vybrat kategorie:</h3>
@@ -81,7 +84,3 @@ function Recipes() {
         </>
     );
 };
-
-
-export default Recipes
-// export default protectRoute(Customers);

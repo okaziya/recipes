@@ -8,6 +8,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithPopup
 } from "firebase/auth";
+
 import React, {createContext, useContext, useState, useEffect, useMemo, useCallback} from 'react';
 import IUser from "../interfaces/user";
 import {getUserById, setUser} from "../actions/users";
@@ -49,9 +50,7 @@ export const SessionProvider = ({children}: ProviderProps) => {
         {firstName, lastName}: { firstName: string; lastName: string }
     ) => {
         const {user: userCredential} = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("user from FB method", userCredential)
         if (userCredential) {
-            console.log("***", email, firstName, lastName);
             await setUser(userCredential.uid, {
                 email,
                 firstName,
@@ -80,7 +79,6 @@ export const SessionProvider = ({children}: ProviderProps) => {
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user: User | null) => {
-            console.log("ITS NAAAATS", user)
             if (user) {
                 try {
                     const userData = await getUserById(user.uid);

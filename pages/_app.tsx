@@ -1,7 +1,7 @@
-import '../styles/globals.css'
+import '../styles/globals.sass'
 import type {AppProps} from 'next/app'
 import Layout from '../components/layout'
-import {SessionProvider} from "../contexts/session";
+import {SessionProvider} from "../contexts/session"
 
 function MyApp({Component, pageProps}: AppProps) {
     return (

@@ -7,6 +7,11 @@ const cs = {
         signOut: "sign out",
         signIn: "sign in",
         signUp: "Register",
+        errors: {
+            "auth/user-not-found": "There is no existing user record corresponding to the provided identifier.",
+            "auth/email-already-exists": "The provided email is already in use by an existing user. Each user must have a unique email.",
+            "auth/wrong-password": "wrong password"
+        }
     },
     lessThan: "<",
     favoriteRecipes: {

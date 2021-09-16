@@ -1,0 +1,40 @@
+@import '../../styles/variables'
+
+.card
+  flex-direction: row
+  width: 100%
+  height: 115px
+  box-shadow: 0.6rem 0.5rem 0 0.1rem $blue
+
+.cardBody
+  width: 80%
+  .cardTitle
+    display: inline-block
+    width: 100%
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    text-align: right
+  .measure
+    height: 37px
+    justify-content: flex-end
+  .amount
+    height: 100%
+    max-width: 5rem
+
+.imageContainer
+  width: 20%
+  height: 100%
+  img
+    border-bottom-right-radius: 0
+    border-top-right-radius: 0
+    object-fit: fill
+    height: 100%
+
+.imageContainerEmpty
+  height: 100%
+  background: beige
+  border-radius: $border-radius
+  display: flex
+  align-items: center
+  justify-content: center

@@ -1,6 +1,6 @@
 import Form from "../../components/ui/form";
 import {useSession} from "../../contexts/session";
-import {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Input from "../../components/ui/input";
 import Button from "../../components/ui/button";
@@ -67,6 +67,31 @@ export default function SignUp() {
         event.preventDefault();
         router.back();
     };
+
+    // <form onSubmit={handleSubmit(onSubmit)}>
+    //     <label>First Name</label>
+    //     <input
+    //         {...register("firstName", {
+    //             required: true,
+    //             maxLength: 20,
+    //             pattern: /^[A-Za-z]+$/i
+    //         })}
+    //     />
+    //     {errors?.firstName?.type === "required" && <p>This field is required</p>}
+    //     {errors?.firstName?.type === "maxLength" && (
+    //         <p>First name cannot exceed 20 characters</p>
+    //     )}
+    //     {errors?.firstName?.type === "pattern" && (
+    //         <p>Alphabetical characters only</p>
+    //     )}
+    //     <label>Last Name</label>
+    //     <input {...register("lastName", { pattern: /^[A-Za-z]+$/i })} />
+    //     {errors?.lastName?.type === "pattern" && (
+    //         <p>Alphabetical characters only</p>
+    //     )}
+    //
+    //     <input type="submit" />
+    // </form>
 
     return (
         <>
