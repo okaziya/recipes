@@ -7,7 +7,6 @@ body
   margin: 0
   font-family: 'Josefin Sans', sans-serif
 
-
 a
   color: inherit
   text-decoration: none
@@ -16,3 +15,18 @@ a
 *
   box-sizing: border-box
 
+
+ul
+  list-style: none
+
+//Remove “X” icon from search input field or input type search
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration
+  display: none
+
+.nav-link
+  font-size: $font-size-lg
+  &.active
+    text-shadow: 0 0 4px #fff, 0 0 20px #fff, 0 0 1px #fff, 0 0 50px $blue, 0 0 35px $blue, 0 0 90px $blue, 0 0 100px $blue, 0 0 0 $blue

@@ -23,7 +23,3 @@ export default function MyLink(props: LinkProps & Props) {
         </Link>
     );
 }
-
-export const linkActive = (link: string, path?: string) => {
-    return (path?.startsWith(link) && link !== "/") || path === link;
-};

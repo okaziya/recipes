@@ -7,7 +7,7 @@ $gray-600: #999999
 $gray-800: #707070
 $gray-900: #666666
 
-$theme-colors: ("primary": $yellow, "secondary": $blue)
+$theme-colors: ("primary": $yellow, "secondary": $blue, "danger": $red, "dark": black)
 
 ////general
 
@@ -16,91 +16,48 @@ $link-color: $green
 $body-bg: $gray-200
 $box-shadow: 0 .5rem 1rem rgba($gray-900, .15)
 $font-size-base: 1rem
-$font-size-lg: $font-size-base * 1.14
+$font-size-lg: $font-size-base * 1.3
 $font-size-sm: $font-size-base * 0.86
 
 //card
 
 $card-spacer: 0.5rem
 $card-bg: $body-bg
-$card-border-width: .2rem
-$card-border-radius: $border-radius
-$card-border-color: darkblue
+$card-border-width: .15rem
+//$card-border-radius: $border-radius
+//$card-border-color: black
 
-////tables in card
-//$table-striped-order: even
-//$table-accent-bg: #f6f6f7
-//$table-hover-bg: lighten($light-green, 20%)
-//
-////inputs
-//
-//$input-padding-y: 0.1rem
-//
-//$input-border-color: $gray-200
-//$input-border-width: 2px
-//$input-height: 25px
-//$input-font-size: $font-size-sm
-//$input-height-sm: 20px
-//$input-color: $gray-600
-//
-////borders
-//
-//$border-color: $gray-200
-//$border-radius-bg: 10px
-//$border-radius-sm: 4px
-//$border-radius: 5px
-//$border-width: 2px
-//
-////modal
-//
-//$modal-content-border-radius: 10px
-//$modal-content-border-width: 0
-//
-////btn
-//
-//$btn-padding-y: 0.41rem
-//$btn-padding-x: 2.35rem
-//
-////btn-sm
-//
-//$btn-padding-y-sm: 0.3rem
-//$btn-padding-x-sm: 0.5rem
-//$btn-font-size-sm: $font-size-sm
-//// $btn-border-radius-sm: 10px
-//
-////btn-lg
-//
-//$btn-padding-y-lg: 0.6rem
-//$btn-padding-x-lg: 4rem
-//$btn-border-radius-lg: $border-radius
-//
-////nav
-//
-//$navbar-padding-y: 15px
-//$nav-link-padding-y: $btn-padding-y-sm
-//$nav-link-padding-x: $btn-padding-x/2
-//$nav-tabs-border-width: 0
-//$nav-tabs-border-radius: $border-radius-bg
-//$nav-pills-border-radius: $border-radius-bg
-//
-////nav tabs
-//
-//$nav-tabs-link-active-bg: $white
-//
-////////////////custom varuables//////////////////////
-//
-//$card-header-height: 2.47rem
-//
-//$border: 2px solid $gray-200
-//$border-thin: 1px solid $gray-200
-//$pinned-column-width: 180px
-//$blue-lighten: lighten($blue, 10%)
-//$blue-darken: darken($blue, 10%)
-//$blue-green-gradient: linear-gradient(90deg, $blue, $green)
-//$filter-width: 386px
-//$white-line: 2px solid $white
-//$navbar-height: 76px
-//$filter-with-close: 45px
-//$input-padding-x: 0.75rem
+//navbar
+
+$navbar-height: 76px
+$navbar-dark-color: $green
+$navbar-dark-hover-color: white
+$navbar-dark-active-color: $green
+
+//forms
+
+$input-border-color: $green
+$input-border-width: 0.2rem
+$input-focus-box-shadow: 0 0 .5rem 0.25rem #a5ffd6
+$input-focus-border-color: $green
+
+//btn
+
+$btn-line-height: 100%
+$btn-padding-y: 0.41rem
+$btn-padding-x: 2.35rem
+
+//btn-sm
+
+$btn-padding-y-sm: 0.3rem
+$btn-padding-x-sm: 0.5rem
+$btn-font-size-sm: $font-size-sm
+// $btn-border-radius-sm: 10px
+
+//btn-lg
+
+$btn-padding-y-lg: 0.6rem
+$btn-padding-x-lg: 1.5rem
+$btn-border-radius-lg: $border-radius
 
 @import "~bootstrap/scss/bootstrap"

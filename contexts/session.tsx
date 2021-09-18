@@ -13,6 +13,7 @@ import React, {createContext, useContext, useState, useEffect, useMemo, useCallb
 import IUser from "../interfaces/user";
 import {getUserById, setUser} from "../actions/users";
 import {useRouter} from "next/router";
+import {useStore} from './store'
 
 export type ContextProps = {
     createUserWithEmailAndPasswordCustom: (
@@ -21,6 +22,7 @@ export type ContextProps = {
         options: { firstName: string; lastName: string }
     ) => Promise<void>;
     currentUser: IUser | null;
+    isReady: boolean;
     setCurrentUser: React.Dispatch<React.SetStateAction<IUser | null>>;
     signInWithEmailAndPasswordCustom: (
         email: string,
@@ -40,7 +42,9 @@ type ProviderProps = {
 
 export const SessionProvider = ({children}: ProviderProps) => {
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+    const [isReady, setIsReady] = useState(false);
     const router = useRouter();
+    const { emptyStore } = useStore();
 
     console.log("currentUser", currentUser);
 
@@ -68,14 +72,17 @@ export const SessionProvider = ({children}: ProviderProps) => {
             await signOut(auth)
             await router.replace("/auth/signIn");
             setCurrentUser(null)
+            emptyStore()
         } catch (error) {
             console.error(error)
         }
-    }, [])
+    }, [emptyStore])
 
     const signInWidthGoogle = () => {
         signInWithPopup(auth, provider);
     }
+
+    console.log("is ready", isReady)
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user: User | null) => {
@@ -93,17 +100,19 @@ export const SessionProvider = ({children}: ProviderProps) => {
             } else {
                 setCurrentUser(null)
             }
+            setIsReady(true);
         })
-    }, [])
+    }, [signOutUser])
 
     const value = useMemo(() => ({
         currentUser,
         setCurrentUser,
         signOutUser,
+        isReady,
         signInWithEmailAndPasswordCustom,
         createUserWithEmailAndPasswordCustom,
         signInWidthGoogle
-    }), [currentUser, signOutUser]);
+    }), [currentUser, signOutUser, isReady]);
 
     return (
         <SessionContext.Provider value={value}>{children}</SessionContext.Provider>

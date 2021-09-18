@@ -1,69 +1,74 @@
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useState, useMemo, useCallback} from "react";
 import styles from "../../styles/components/recipes/recipes.module.sass"
 import RecipeList from "../../components/recipeList";
-import MyLink from "../../components/ui/link";
 import IRecipe from "../../interfaces/recipe";
 
+type Category = "Breakfast"| "Lunch"| "Dinner"| "Dessert";
+
 export default function Recipes() {
-    const [searchRecipe, setSearchRecipe] = useState("");
-    const [filterList, setFilterList] = useState<IRecipe[]>([]);
+    const [textInSearchInput, setTextInSearchInput] = useState("");
+    const [checkedCategories, setCheckedCategories] = useState<Category[] | null>(null);
+
+    console.log("textInSearchInput", textInSearchInput)
 
     const recipesData = [
         {
             name: "Banana Bread",
-            category: "deserts"
-        }, {name: "oven-Roasted Asparagus", category: "main course"}
+            category: "Dessert"
+        }, {name: "oven-Roasted Asparagus", category: "Breakfast"}
     ] as IRecipe[]
 
-    const categories = ["deserts", "main course"]
+    const categories: Category[] = ["Breakfast", "Lunch", "Dinner", "Dessert"]
 
 
-    const handleChange = (ev) => {
-        setSearchRecipe(ev.target.value);
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTextInSearchInput(e.target.value);
     };
 
-    function isMatchFilter(recipe: IRecipe) {
-        return (
-            recipe.name
-                .toLocaleLowerCase()
-                .includes(searchRecipe.toLocaleLowerCase()) &&
-            (filterList.length
-                ? filterList.some((el) => el === recipe.category)
+    const isMatchFilter = useCallback((recipe: IRecipe) => {
+          console.log(recipe.name.toLocaleLowerCase().includes(textInSearchInput.toLocaleLowerCase()) &&
+            (checkedCategories
+                ? checkedCategories.some((el) => el === recipe.category)
+                : true))
+        return recipe.name.toLocaleLowerCase().includes(textInSearchInput.toLocaleLowerCase()) &&
+            (checkedCategories
+                ? checkedCategories.some((el) => el === recipe.category)
                 : true)
-        );
-    }
+    }, [checkedCategories, textInSearchInput])
 
-    const resultRecipeList =
-        searchRecipe || filterList.length ? recipesData.filter(isMatchFilter) : recipesData;
+    const finalFilteredRecipeList = useMemo(() => {
+            return textInSearchInput || checkedCategories ? recipesData.filter(isMatchFilter) : recipesData}
+        , [textInSearchInput, checkedCategories, recipesData])
 
-    const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const checkedCategory = e.target.name;
 
-        setFilterList(
-            e.target.checked
-                ? [...filterList, ...[checkedCategory]]
-                : filterList.filter((item) => item !== checkedCategory)
+    const handleCheckboxStateChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const currentCheckedCategory = e.target.value as Category;
+        const isChecked = e.target.checked;
+        setCheckedCategories(function(prevState) {
+                if (isChecked) {
+                    return prevState ? [...prevState, currentCheckedCategory] :  [currentCheckedCategory]
+                } else if (!isChecked && prevState) {
+                    return prevState.filter((category) => category !== currentCheckedCategory)
+                } else return null
+            }
         );
     };
 
     return (
         <>
-            <MyLink href={"/recipes/new"}>+</MyLink>
             {categories && (
                 <>
-                    <h3 className="text-center">Vybrat kategorie:</h3>
-                    <ul className="filter-category mb-0">
-                        {categories.map((category, index) => (
-                            <li key={index} className="filter-item">
+                    <h3 className="text-center">Select category you are looking for or start to type in:</h3>
+                    <ul className="d-flex p-0">
+                        {categories.map((categoryName, index) => (
+                            <li key={index} className="align-items-center d-flex">
                                 <label>
                                     <input
                                         type="checkbox"
-                                        onChange={handleFilterChange}
-                                        name={category}
+                                        onChange={handleCheckboxStateChange}
+                                        value={categoryName}
                                     />
-                                    <span>
-                    <p>{category}</p>
-                  </span>
+                                    <span className="mx-2">{categoryName}</span>
                                 </label>
                             </li>
                         ))}
@@ -75,11 +80,11 @@ export default function Recipes() {
                     className="text-center el-center"
                     type="text"
                     placeholder="search"
-                    value={searchRecipe}
+                    value={textInSearchInput}
                     onChange={handleChange}
                 />
             </div>
-            <RecipeList recipes={resultRecipeList}/>
+            <RecipeList recipes={finalFilteredRecipeList}/>
             {/*<canvas id='bg'> </canvas>*/}
         </>
     );

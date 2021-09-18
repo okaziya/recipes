@@ -4,11 +4,16 @@
   flex-direction: row
   width: 100%
   height: 115px
-  box-shadow: 0.6rem 0.5rem 0 0.1rem $blue
+  box-shadow: rgba(0, 0, 0, 0.4) 0 2px 4px, rgba(0, 0, 0, 0.3) 0 7px 13px -3px, rgba(0, 0, 0, 0.2) 0 -3px 0 inset
 
+.cardHasHover
+  cursor: pointer
+  &:hover
+    box-shadow: 0.2rem 0.2rem 0 0 $green
+    transform: translate(4px, 4px)
 .cardBody
   width: 80%
-  .cardTitle
+  .cardTitleShort
     display: inline-block
     width: 100%
     white-space: nowrap
@@ -18,13 +23,14 @@
   .measure
     height: 37px
     justify-content: flex-end
+    z-index: 2
   .amount
     height: 100%
     max-width: 5rem
 
 .imageContainer
   width: 20%
-  height: 100%
+  height: calc(100% - 4px)
   img
     border-bottom-right-radius: 0
     border-top-right-radius: 0
@@ -34,7 +40,6 @@
 .imageContainerEmpty
   height: 100%
   background: beige
-  border-radius: $border-radius
   display: flex
   align-items: center
   justify-content: center

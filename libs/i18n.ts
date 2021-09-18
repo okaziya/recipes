@@ -1,7 +1,7 @@
-import cs from "../locales/cs";
+import en from "../locales/en";
 
-const locales = {cs};
-const lng = "cs";
+const locales = {en};
+const lng = "en";
 
 type Data = {
     [key: string]: Data | string;

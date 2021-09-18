@@ -1,6 +1,6 @@
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, useState} from "react";
 import styles from "../styles/components/ingredientCard.module.sass"
 import ImagePlaceholder from "../public/images/image.svg"
 import Image from "next/image"
@@ -9,7 +9,8 @@ import ReactSelect, {StylesConfig} from 'react-select'
 import {useForm, Controller} from "react-hook-form";
 import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-
+import {useStore} from "../contexts/store";
+import Ingredient from "../models/ingredient";
 import i18n from "../libs/i18n";
 import {CSSObject} from "@emotion/serialize";
 
@@ -36,6 +37,9 @@ type Props = {
 }
 
 export default function IngredientCard({name, measures, imageUri}: Props) {
+    const [isShowMeasures, setIsShowMeasures] = useState(false);
+    const {recipeDispatch} = useStore()
+
     const defaultValues = {
         amount: 1,
         measure: {label: `${measures[0].label}`, value: `${measures[0].value}`}
@@ -65,40 +69,54 @@ export default function IngredientCard({name, measures, imageUri}: Props) {
 
     const onSubmit = async (data: FormSchema) => {
         console.log("=========== data", data);
+        const {measure, amount} = data;
+        const ingredientData = new Ingredient({
+            name: name,
+            measure: measure.label,
+            amount: amount
+        })
+        recipeDispatch({payload: ingredientData, type: 'ADD_INGREDIENT'})
+        setIsShowMeasures(false)
         reset();
     };
 
+    const handleChildClick = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+    }
+
     return (
-        <Card className={styles.card}>
+        <Card onClick={() => setIsShowMeasures(!isShowMeasures)}
+              className={`${styles.card} ${isShowMeasures ? "" : styles.cardHasHover}`}>
             <div className={styles.imageContainer}>{imageUri === undefined ?
                 <div className={styles.imageContainerEmpty}><Image src={ImagePlaceholder} alt="empty image" width={30}
                                                                    height={30}/></div> :
                 <Card.Img src={imageUri}/>
             }</div>
             <Card.Body className={styles.cardBody}>
-                <Card.Title className={styles.cardTitle}>{name}</Card.Title>
-                <Card.Text>
-                    <form onSubmit={handleSubmit(onSubmit)} className={`d-flex align-items-center ${styles.measure}`}>
-                        <Controller name="measure"
-                                    control={control}
-                                    render={({field}) => (
-                                        <ReactSelect {...field}
-                                                     options={measures}
-                                                     styles={measureSelectStyle}
-                                        />
-                                    )}
-                        />
-                        {errors.measure !== undefined && <span role="alert">{errors.measure.label?.message}</span>}
-                        <input className={`${styles.amount} mx-2`} type="number" step={1} min={1}
-                               placeholder="amount" {...register("amount", {
-                            setValueAs: value => Math.max(1, parseInt(value)),
-                        })} />
-                        {errors.amount && <span role="alert">{errors.amount.message}</span>}
-                        <Button className="h-100" variant="primary" type='submit'>
-                            <Image src={Plus} alt="plus" width={20} height={20}/>
-                        </Button>
-                    </form>
-                </Card.Text>
+                <Card.Title className={isShowMeasures ? styles.cardTitleShort : ""}>{name}</Card.Title>
+                {isShowMeasures &&
+                <form onClick={handleChildClick} onSubmit={handleSubmit(onSubmit)}
+                      className={`d-flex align-items-center ${styles.measure}`}>
+                    <Controller name="measure"
+                                control={control}
+                                render={({field}) => (
+                                    <ReactSelect {...field}
+                                                 options={measures}
+                                                 styles={measureSelectStyle}
+                                    />
+                                )}
+                    />
+                    {errors.measure !== undefined && <span role="alert">{errors.measure.label?.message}</span>}
+                    <input className={`${styles.amount} mx-2`} type="number" step={1} min={1}
+                           placeholder="amount" {...register("amount", {
+                        setValueAs: value => Math.max(1, parseInt(value)),
+                    })} />
+                    {errors.amount && <span role="alert">{errors.amount.message}</span>}
+                    <Button className="h-100" variant="primary" size="sm" type='submit'>
+                        <Image src={Plus} alt="plus" width={20} height={20}/>
+                    </Button>
+                </form>
+                }
             </Card.Body>
         </Card>)
 }

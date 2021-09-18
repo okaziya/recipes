@@ -1,8 +1,10 @@
-const cs = {
+const en = {
     appName: "recipes",
     authorization: "Log in or create an account",
     beforeRegister: "Don't have an account?",
     create: "create account",
+    showMore: "show more",
+    showLess: "show less",
     auth: {
         signOut: "sign out",
         signIn: "sign in",
@@ -19,4 +21,4 @@ const cs = {
     }
 }
 
-export default cs;
+export default en;

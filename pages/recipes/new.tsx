@@ -1,77 +1,41 @@
-import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
-import axios from 'axios';
-import {debounce} from 'lodash';
-import IHint from "../../interfaces/hint";
-import IFood from "../../interfaces/food"
-import IngredientCard from "../../components/ingredientCard";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import React from "react";
+import Hints from "../../components/hints";
+import {useStore} from "../../contexts/store";
+import Image from "next/image";
+import Trash from '../../public/images/trash.svg';
+import Button from 'react-bootstrap/Button';
+import {useRouter} from "next/router";
 
-type Options = { method: string, url: string, params: { ingr: string }, headers: { "x-rapidapi-host": string, "x-rapidapi-key": string } }
+export default function NewRecipe() {
+    const {recipe, recipeDispatch} = useStore();
+    const {ingredients} = recipe;
+    const router = useRouter()
+    console.log("restart", recipe)
 
-type ServerResponse = {
-    data: ServerData
-}
+    function handleDeleteSelectedIngredient(index: number) {
+        recipeDispatch({payload: index, type: 'DELETE_INGREDIENT'})
+    }
 
-type ServerData = {
-    text: string,
-    parsed: { food: IFood }[],
-    hints: IHint[],
-}
+    const handleBack = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        router.back();
+    }
 
-export default function Ingredients() {
-    const [ingredientQuery, setIngredientQuery] = useState("");
-    const [hints, setHints] = useState<IHint[] | null>(null);
-
-    useEffect(() => {
-        return () => {
-            debouncedChangeHandler.cancel();
-        }
-    }, []);
-
-    useEffect(() => {
-        if (ingredientQuery) {
-            const options = {
-                method: 'GET',
-                url: 'https://edamam-food-and-grocery-database.p.rapidapi.com/parser',
-                params: {ingr: `${ingredientQuery}`},
-                headers: {
-                    'x-rapidapi-host': 'edamam-food-and-grocery-database.p.rapidapi.com',
-                    'x-rapidapi-key': '45bbcda4bamsh6ad6f8a4d4bcadcp15c868jsn147017e74101'
-                }
-            } as Options;
-
-            (async () => {
-                if (!options) return
-                // @ts-ignore
-                const {data} = await axios.request<ServerData>(options) as ServerResponse
-                setHints(data.hints.filter(({food}) => food.category === "Generic foods"))
-                console.log("data", data)
-            })()
-        } else {
-            setHints(null)
-        }
-    }, [ingredientQuery])
-
-    const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setIngredientQuery(event.target.value);
-    };
-
-    const debouncedChangeHandler = useMemo(
-        () => debounce(changeHandler, 300)
-        , []);
-    console.log("hints", hints)
-    return <div>
-        <input
-            onChange={debouncedChangeHandler}
-            type="text"
-            placeholder="Type a query..."
-        />
-        {ingredientQuery && <h2>{ingredientQuery}</h2>}
-        {hints && <Row md={1} lg={2} className="g-4">
-            {hints.map(({food, measures}, index) => <Col key={index}><IngredientCard name={food.label} imageUri={food.image}
-                                                                                    measures={measures.map(el => {return {label: el.label, value: el.label}})}/>
-            </Col>)}
-        </Row>}
-    </div>
+    return <>
+        <Button className="bg-black border-white me-auto text-uppercase" size="sm" variant="link"
+                onClick={handleBack}>Back</Button>
+        <Hints/>
+        {ingredients.length > 0 && <div className="bg-primary mt-5 p-4 text-black w-100">
+            <h3>Selected ingredients: </h3>
+            <ul>
+                {ingredients.map(({name, measure, amount}, index) => <li
+                    className="align-items-baseline d-flex justify-content-between mb-2" key={index}><h5>{`${name}:   ${
+                    amount} ${measure}`}</h5><Button variant="danger"
+                                                     onClick={() => handleDeleteSelectedIngredient(index)}><Image
+                    src={Trash} alt="trash" width={20}
+                    height={20}/></Button>
+                </li>)}
+            </ul>
+        </div>}
+    </>
 }
